@@ -1,0 +1,23 @@
+{
+  "name": "slidereal",
+  "version": "0.0.1",
+  "description": "A slide presentation engine for the web",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpaceMacGyver/slidereal.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SpaceMacGyver/slidereal/issues"
+  },
+  "homepage": "https://github.com/SpaceMacGyver/slidereal#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0"
+  }
+}
