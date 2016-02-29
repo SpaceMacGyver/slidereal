@@ -9,3 +9,18 @@ export class Frame {
         }
     }
 }
+
+export class Program extends Frame {
+    constructor(name) {
+        super(name);
+        this.frames = [];
+    }
+    
+    addFrame(frame) {
+        this.frames.push(frame);
+    }
+    
+    getFrames() {
+        return this.frames;
+    }
+}

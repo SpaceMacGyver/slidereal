@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import Chance from 'chance';
-import {Frame} from '../src/frame';
+import {Frame, Program} from '../src/frame';
 
 let chance = new Chance();
 
@@ -32,6 +32,43 @@ describe('Feature: Frame model', () => {
         
         it('Then the two frames should have different names', () => {
             expect(frame.name).to.equal(frameName);
+        });
+    });
+});
+
+describe('Feature: Program frame', () => {
+    describe('Scenario: A program has frames', () => {
+        let program,
+            frames;
+        beforeEach('Given a program', () => {
+            program = new Program();
+        });
+        beforeEach('Given some frames', () => {
+            frames = [
+                new Frame(),
+                new Frame()
+            ];
+            program.addFrame(frames[0]);
+            program.addFrame(frames[1]);
+        });
+        
+        it('Then it should return the requested frames', () => {
+            expect(program.getFrames()).to.eql(frames);
+        });
+    });
+    
+    describe('Scenario: The program was provided with a name', () => {
+        let program,
+            programName;
+        beforeEach('Given a program name', () => {
+            programName = chance.string();
+        });
+        beforeEach('And a program with the name provided', () => {
+            program = new Program(programName);
+        });
+        
+        it('Then should possess that name after instantiation', () => {
+            expect(program.name).to.equal(programName);
         });
     });
 });
