@@ -1,8 +1,9 @@
 import {expect} from 'chai';
 import Chance from 'chance';
-import {Frame, Program} from '../src/frame';
+import {Frame, Program, Slide} from '../src/frame';
 
-let chance = new Chance();
+let chance = new Chance(),
+    program;
 
 describe('Feature: Frame model', () => {
     describe('Scenario: Frame without name overrides', () => {
@@ -36,13 +37,13 @@ describe('Feature: Frame model', () => {
     });
 });
 
+function givenProgram() {
+    program = new Program();
+}
 describe('Feature: Program frame', () => {
     describe('Scenario: A program has frames', () => {
-        let program,
-            frames;
-        beforeEach('Given a program', () => {
-            program = new Program();
-        });
+        let frames;
+        beforeEach('Given a program', givenProgram);
         beforeEach('Given some frames', () => {
             frames = [
                 new Frame(),
@@ -56,10 +57,36 @@ describe('Feature: Program frame', () => {
             expect(program.getFrames()).to.eql(frames);
         });
     });
+
+    describe('Scenario: A program told to construct its own frames', () => {
+        beforeEach('Given a program', givenProgram);
+        beforeEach('Given frames added with empty params', () => {
+            program.addFrame();
+            program.addFrame();
+        });
+
+        it('Then it should have two Slides', () => {
+            let frames = program.getFrames();
+            expect(frames, 'count').to.have.length(2);
+            frames.forEach((frame, key) => {
+                let index = key + 1;
+                expect(frame, `frame ${index} type`).to.be.instanceof(Slide);
+            });
+        });
+
+        it('And its Slides should be sequentially named', () => {
+            const expectedFrameNames = ['1', '2'];
+            let frames = program.getFrames();
+            frames.forEach((frame, key) => {
+                let index = key + 1;
+                expect(frame.name, `frame ${index} name`)
+                    .to.equal(expectedFrameNames[key]);
+            });
+        });
+    });
     
     describe('Scenario: The program was provided with a name', () => {
-        let program,
-            programName;
+        let programName;
         beforeEach('Given a program name', () => {
             programName = chance.string();
         });
