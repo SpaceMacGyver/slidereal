@@ -45,6 +45,7 @@ function givenProgram() {
 function givenSlide() {
     slide = new Slide();
 }
+
 describe('Feature: Program frame', () => {
     describe('Scenario: A program has frames', () => {
         let frames;
@@ -99,7 +100,9 @@ describe('Feature: Program frame', () => {
             expect(program.name).to.equal(programName);
         });
     });
-    
+});
+  
+describe('Feature: Slide frames', () => { 
     describe('Scenario: A slide has subframes', () => {
         let expectedFrames;
             
