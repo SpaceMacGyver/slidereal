@@ -36,5 +36,24 @@ export class Program extends Frame {
 export class Slide extends Frame {
     constructor(name) {
         super(name);
+        this.frames = [];
+        this.currentFrameAssignment = 0;
+    }
+    
+    addFrame(frame) {
+        if (!frame) {
+            let newFrameAssignment = ++this.currentFrameAssignment,
+                newFrameName = String(newFrameAssignment),
+                newFrame = new Frame(newFrameName);
+
+            this.frames.push(newFrame);
+            return newFrame;
+        }
+        this.frames.push(frame);
+        return frame;
+    }
+    
+    getFrames() {
+        return this.frames;
     }
 }

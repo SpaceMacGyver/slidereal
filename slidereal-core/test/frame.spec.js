@@ -3,6 +3,7 @@ import Chance from 'chance';
 import {Frame, Program, Slide} from '../src/frame';
 
 let chance = new Chance(),
+    slide,
     program;
 
 describe('Feature: Frame model', () => {
@@ -39,6 +40,10 @@ describe('Feature: Frame model', () => {
 
 function givenProgram() {
     program = new Program();
+}
+
+function givenSlide() {
+    slide = new Slide();
 }
 describe('Feature: Program frame', () => {
     describe('Scenario: A program has frames', () => {
@@ -77,11 +82,7 @@ describe('Feature: Program frame', () => {
         it('And its Slides should be sequentially named', () => {
             const expectedFrameNames = ['1', '2'];
             let frames = program.getFrames();
-            frames.forEach((frame, key) => {
-                let index = key + 1;
-                expect(frame.name, `frame ${index} name`)
-                    .to.equal(expectedFrameNames[key]);
-            });
+            expect(frames.map(frame => frame.name)).to.eql(expectedFrameNames);
         });
     });
     
@@ -96,6 +97,46 @@ describe('Feature: Program frame', () => {
         
         it('Then should possess that name after instantiation', () => {
             expect(program.name).to.equal(programName);
+        });
+    });
+    
+    describe('Scenario: A slide has subframes', () => {
+        let expectedFrames;
+            
+        beforeEach('Given a slide', givenSlide);
+        beforeEach('Given subframes', () => {
+            expectedFrames = [];
+            for (let i = 0; i < 2; i++) {
+                expectedFrames.push(slide.addFrame());
+            }
+        });
+        
+        it('Then should return subframes', () => {
+            let subframes = slide.getFrames();
+            expect(subframes).to.eql(expectedFrames);
+        });
+        it('And they should be sequentially named', () => {
+            let subframes = slide.getFrames();
+            expect(subframes.map(frame => frame.name)).to.eql(['1', '2']);
+        });
+    });
+    
+    describe('Scenario: A slide can be provided subframes', () => {
+        let expectedFrames;
+            
+        beforeEach('Given a slide', givenSlide);
+        beforeEach('Given a mixture of implicit and explicit frames', () => {
+            expectedFrames = [];
+            expectedFrames.push(slide.addFrame());
+            expectedFrames.push(slide.addFrame(new Frame('Test')));
+            expectedFrames.push(slide.addFrame());
+        });
+        
+        it('Then should return expected subframes', () => {
+            const expectedFrameNames = ['1', 'Test', '2'];
+            let subframes = slide.getFrames();
+            expect(subframes.map(frame => frame.name))
+                .to.eql(expectedFrameNames);
         });
     });
 });
